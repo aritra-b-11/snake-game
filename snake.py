@@ -64,9 +64,13 @@ while True:
         if(snakeHeadY >= height-pixel):
             snakeHeadY = pixel
     DISPLAYSURF.blit(snakeHeadImg, (snakeHeadX,snakeHeadY))
+    DISPLAYSURF.blit(geccoImg, (geccoX,geccoY))
+    if(snakeHeadX==geccoX and snakeHeadY==geccoY):
+        length += 1
+        geccoX= randint(0,width_mult)*pixel
+        geccoY= randint(0,height_mult)*pixel
     for i in range(length):
         DISPLAYSURF.blit(snakeBodyImg, (snakeHeadX-((i+1)*pixel),snakeHeadY))
-    DISPLAYSURF.blit(geccoImg, (geccoX,geccoY))
     for event in pygame.event.get():
         if event.type==QUIT:
             pygame.quit()
