@@ -44,6 +44,9 @@ speed = low
 direction = 'right'
 
 length = 3
+direction_array=[]
+for i in range(length):
+    direction_array.append(direction)
 
 while True:
     DISPLAYSURF.fill(red)
@@ -69,8 +72,18 @@ while True:
         length += 1
         geccoX= randint(0,width_mult)*pixel
         geccoY= randint(0,height_mult)*pixel
+    pivotX=snakeHeadX
+    pivotY=snakeHeadY
     for i in range(length):
-        DISPLAYSURF.blit(snakeBodyImg, (snakeHeadX-((i+1)*pixel),snakeHeadY))
+        if(direction_array[i]=="right"):
+            pivotX -= pixel
+        elif(direction_array[i]=="left"):
+            pivotX += pixel
+        elif(direction_array[i]=="up"):
+            pivotY -= pixel
+        elif(direction_array[i]=="down"):
+            pivotY += pixel
+        DISPLAYSURF.blit(snakeBodyImg, (pivotX,pivotY))
     for event in pygame.event.get():
         if event.type==QUIT:
             pygame.quit()
@@ -88,5 +101,7 @@ while True:
             elif event.key==pygame.K_DOWN:
                 direction = 'down'
                 snakeHeadImg = snakeHeadImgDown
+            direction_array.append(direction)
+            del(direction_array[len(direction_array)-1])
     pygame.display.update()
     fpsClock.tick(FPS)
