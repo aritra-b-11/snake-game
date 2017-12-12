@@ -4,13 +4,11 @@ from random import randint
 
 pygame.init()
 pixel = 30
-width_mult, height_mult = 40, 20
+width_mult, height_mult = 30, 20
 width, height = pixel*width_mult, pixel*height_mult
 
 pygame.display.set_caption("Snake")
 
-FPS = pixel
-fpsClock = pygame.time.Clock()
 
 white = (255,255,255)
 black = (0,0,0)
@@ -19,6 +17,7 @@ green = (0, 255, 0)
 blue= (0, 0, 255)
 
 DISPLAYSURF = pygame.display.set_mode((width,height))
+
 snakeBodyImg = pygame.image.load('snake_head.jpg')
 snakeBodyImg = pygame.transform.scale(snakeBodyImg,(pixel,pixel))
 
@@ -37,15 +36,23 @@ geccoImg = pygame.transform.scale(geccoImg,(pixel,pixel))
 geccoX= randint(0,width_mult)*pixel
 geccoY= randint(0,height_mult)*pixel
 
-low = pixel * 0.2
+low = pixel * 0.3
 mid = pixel * 0.4
-high = pixel * 0.6
+high = pixel * 0.5
 speed = low
 direction = 'right'
+FPS = speed
+fpsClock = pygame.time.Clock()
 
-length = 3
+score = 0
+
+pygame.mixer.music.load('snake.mp3')
+pygame.mixer.music.play(-1, 0.0)
+
+
+length = 10
 direction_array=[]
-for i in range(length):
+for i in range(length-1):
     direction_array.append(direction)
 
 while True:
@@ -72,22 +79,24 @@ while True:
         length += 1
         geccoX= randint(0,width_mult)*pixel
         geccoY= randint(0,height_mult)*pixel
+        score += 1
     pivotX=snakeHeadX
     pivotY=snakeHeadY
-    for i in range(length):
-        if(direction_array[i]=="right"):
+    for i in range(length-1):
+        if(direction_array[i]=='right'):
             pivotX -= pixel
-        elif(direction_array[i]=="left"):
+        elif(direction_array[i]=='left'):
             pivotX += pixel
-        elif(direction_array[i]=="up"):
-            pivotY -= pixel
-        elif(direction_array[i]=="down"):
+        elif(direction_array[i]=='up'):
             pivotY += pixel
+        elif(direction_array[i]=='down'):
+            pivotY -= pixel
         DISPLAYSURF.blit(snakeBodyImg, (pivotX,pivotY))
     for event in pygame.event.get():
         if event.type==QUIT:
             pygame.quit()
             sys.exit()
+
         if event.type == pygame.KEYDOWN:
             if event.key==pygame.K_RIGHT:
                 direction = 'right'
@@ -101,7 +110,11 @@ while True:
             elif event.key==pygame.K_DOWN:
                 direction = 'down'
                 snakeHeadImg = snakeHeadImgDown
-            direction_array.append(direction)
-            del(direction_array[len(direction_array)-1])
+    direction_array=direction_array[::-1]
+    direction_array.append(direction)
+    direction_array=direction_array[::-1]
+    del(direction_array[len(direction_array)-1])
     pygame.display.update()
     fpsClock.tick(FPS)
+
+
