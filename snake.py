@@ -4,7 +4,7 @@ from random import randint
 
 pygame.init()
 pixel = 30
-width_mult, height_mult = 30, 20
+width_mult, height_mult = 40, 20
 width, height = pixel*width_mult, pixel*height_mult
 
 pygame.display.set_caption("Snake")
@@ -33,30 +33,30 @@ snakeHeadY = height_mult*pixel*0.5
 
 geccoImg = pygame.image.load('small-gecco.jpg')
 geccoImg = pygame.transform.scale(geccoImg,(pixel,pixel))
-geccoX= randint(0,width_mult)*pixel
-geccoY= randint(0,height_mult)*pixel
+geccoX= randint(2,width_mult-2)*pixel
+geccoY= randint(2,height_mult-2)*pixel
 
-low = pixel * 0.3
-mid = pixel * 0.4
-high = pixel * 0.5
-speed = low
+#print geccoY,geccoX
+
+speed = pixel * 1
 direction = 'right'
-FPS = speed
+FPS = speed * 0.25
 fpsClock = pygame.time.Clock()
 
 score = 0
 
-pygame.mixer.music.load('snake.mp3')
-pygame.mixer.music.play(-1, 0.0)
+#pygame.mixer.music.load('snake.mp3')
+#pygame.mixer.music.play(-1, 0.0)
 
 
-length = 10
+length = 3
 direction_array=[]
 for i in range(length-1):
     direction_array.append(direction)
 
 while True:
-    DISPLAYSURF.fill(red)
+    DISPLAYSURF.fill(white)
+#    print snakeHeadX,snakeHeadY
     if(direction == 'right'):
         snakeHeadX += speed
         if(snakeHeadX >= width-pixel):
@@ -77,9 +77,11 @@ while True:
     DISPLAYSURF.blit(geccoImg, (geccoX,geccoY))
     if(snakeHeadX==geccoX and snakeHeadY==geccoY):
         length += 1
-        geccoX= randint(0,width_mult)*pixel
-        geccoY= randint(0,height_mult)*pixel
+        geccoX= randint(2,width_mult-2)*pixel
+        geccoY= randint(2,height_mult-2)*pixel
+#        print geccoY,geccoX
         score += 1
+        direction_array.append(direction)
     pivotX=snakeHeadX
     pivotY=snakeHeadY
     for i in range(length-1):
