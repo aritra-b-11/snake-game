@@ -56,6 +56,10 @@ for i in range(length-1):
 
 while True:
     DISPLAYSURF.fill(white)
+    topEdge = pygame.draw.rect(DISPLAYSURF, red, (0,0,width,pixel))
+    bottomEdge = pygame.draw.rect(DISPLAYSURF, red, (0,height-pixel,width,pixel))
+    leftEdge = pygame.draw.rect(DISPLAYSURF, red, (0,0,pixel,height))
+    rightEdge = pygame.draw.rect(DISPLAYSURF, red, (width-pixel,0,pixel,height))
 #    print snakeHeadX,snakeHeadY
     if(direction == 'right'):
         snakeHeadX += speed
