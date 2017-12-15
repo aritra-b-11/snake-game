@@ -134,8 +134,6 @@ while True:
             elif event.key==pygame.K_DOWN:
                 direction = 'down'
                 snakeHeadImg = snakeHeadImgDown
-            elif event.key==pygame.K_ESCAPE:
-                paused(width,height,DISPLAYSURF)
     scoretext = myfont.render("Score {0}".format(score), 1, (0,0,0))
     DISPLAYSURF.blit(scoretext, (5, 5))
     direction_array=direction_array[::-1]
@@ -144,18 +142,5 @@ while True:
     del(direction_array[len(direction_array)-1])
     pygame.display.update()
     fpsClock.tick(FPS)
-
-
-def paused(x,y,gameDisplay):
-    textPaused = "Paused"
-    textRect.center = ((x/2),(y/2))
-    gameDisplay.blit(textPaused,textRect)
-
-    for event in pygame.event.get():
-        if event.type==QUIT:
-            pygame.quit()
-            sys.exit()
-        if event.key==pygame.K_ESCAPE:
-            paused(width,height,DISPLAYSURF)
 
 
