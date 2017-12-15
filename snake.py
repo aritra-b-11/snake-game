@@ -51,11 +51,15 @@ score = 0
 
 length = 3
 direction_array=[]
+
 for i in range(length-1):
     direction_array.append(direction)
 
 while True:
     DISPLAYSURF.fill(white)
+    # print "body",snakeBodyImg.get_rect()
+    # print "head",snakeHeadImg.get_rect()
+    # print "food",geccoImg.get_rect()
     topEdge = pygame.draw.rect(DISPLAYSURF, red, (0,0,width,pixel))
     bottomEdge = pygame.draw.rect(DISPLAYSURF, red, (0,height-pixel,width,pixel))
     leftEdge = pygame.draw.rect(DISPLAYSURF, red, (0,0,pixel,height))
@@ -81,13 +85,15 @@ while True:
     DISPLAYSURF.blit(geccoImg, (geccoX,geccoY))
     if(snakeHeadX==geccoX and snakeHeadY==geccoY):
         length += 1
-        geccoX= randint(2,width_mult-2)*pixel
-        geccoY= randint(2,height_mult-2)*pixel
-#        print geccoY,geccoX
         score += 1
         direction_array.append(direction)
+        geccoX= randint(2,width_mult-2)*pixel
+        geccoY= randint(2,height_mult-2)*pixel
+        # chose a rand number excluding the position array
+#        print geccoY,geccoX
     pivotX=snakeHeadX
     pivotY=snakeHeadY
+
     for i in range(length-1):
         if(direction_array[i]=='right'):
             pivotX -= pixel
@@ -97,12 +103,13 @@ while True:
             pivotY += pixel
         elif(direction_array[i]=='down'):
             pivotY -= pixel
+        position_array.append((pivotX,pivotY))
         DISPLAYSURF.blit(snakeBodyImg, (pivotX,pivotY))
+#    print "position", position_array
     for event in pygame.event.get():
         if event.type==QUIT:
             pygame.quit()
             sys.exit()
-
         if event.type == pygame.KEYDOWN:
             if event.key==pygame.K_RIGHT:
                 direction = 'right'
