@@ -5,10 +5,10 @@ from random import choice
 
 pygame.init()
 pixel = 20
-width_mult, height_mult = 40, 20
+width_mult, height_mult = 50, 30
 width, height = pixel*width_mult, pixel*height_mult
 
-myfont = pygame.font.SysFont("monospace", 16)
+myfont = pygame.font.SysFont("monospace", 15)
 pygame.display.set_caption("Snake")
 
 white = (255,255,255)
@@ -45,12 +45,12 @@ FPS = speed * 0.25
 fpsClock = pygame.time.Clock()
 
 score = 0
+gameOver = False
 
-#pygame.mixer.music.load('snake.mp3')
-#pygame.mixer.music.play(-1, 0.0)
+pygame.mixer.music.load('snake.mp3')
+pygame.mixer.music.play(-1, 0.0)
 
-
-length = 3
+length = 10
 direction_array=[]
 position_array_X = []
 position_array_Y = []
@@ -58,7 +58,7 @@ position_array_Y = []
 for i in range(length-1):
     direction_array.append(direction)
 
-while True:
+while not gameOver:
     DISPLAYSURF.fill(white)
     # print "body",snakeBodyImg.get_rect()
     # print "head",snakeHeadImg.get_rect()
@@ -67,27 +67,31 @@ while True:
     bottomEdge = pygame.draw.rect(DISPLAYSURF, red, (0,height-pixel,width,pixel))
     leftEdge = pygame.draw.rect(DISPLAYSURF, red, (0,0,pixel,height))
     rightEdge = pygame.draw.rect(DISPLAYSURF, red, (width-pixel,0,pixel,height))
-#    print snakeHeadX,snakeHeadY
+    # print snakeHeadX,snakeHeadY
     if(direction == 'right'):
         snakeHeadX += speed
-        if(snakeHeadX > width-pixel):
-            snakeHeadX = pixel
+        if(snakeHeadX >= width-pixel):
+            #snakeHeadX = pixel
             #print "right"
+            gameOver=True
     elif(direction == 'left'):
         snakeHeadX -= speed
         if(snakeHeadX < pixel):
-            snakeHeadX = width-pixel
+            #snakeHeadX = width-pixel
             #print "left"
+            gameOver=True
     elif(direction == 'up'):
         snakeHeadY -=speed
         if(snakeHeadY < pixel):
-            snakeHeadY = height-pixel
+            #snakeHeadY = height-pixel
             #print "up"
+            gameOver=True
     elif(direction == 'down'):
         snakeHeadY += speed
-        if(snakeHeadY > height-pixel):
-            snakeHeadY = pixel
+        if(snakeHeadY >= height-pixel):
+            #snakeHeadY = pixel
             #print "down"
+            gameOver=True
     DISPLAYSURF.blit(snakeHeadImg, (snakeHeadX,snakeHeadY))
     DISPLAYSURF.blit(geccoImg, (geccoX,geccoY))
     if(snakeHeadX==geccoX and snakeHeadY==geccoY):
@@ -117,6 +121,9 @@ while True:
         DISPLAYSURF.blit(snakeBodyImg, (pivotX,pivotY))
         # print "position", position_array
     #print snakeHeadX,snakeHeadY
+    for x,y in zip(position_array_X,position_array_Y):
+        if x == snakeHeadX and y == snakeHeadY:
+            gameOver = True
     for event in pygame.event.get():
         if event.type==QUIT:
             pygame.quit()
@@ -143,4 +150,12 @@ while True:
     pygame.display.update()
     fpsClock.tick(FPS)
 
+# If game over is true, draw game over
 
+text = myfont.render("Game Over", True, blue)
+text_rect = text.get_rect()
+text_x = DISPLAYSURF.get_width() / 2 - text_rect.width / 2
+text_y = DISPLAYSURF.get_height() / 2 - text_rect.height / 2
+DISPLAYSURF.blit(text, [text_x, text_y])
+pygame.display.update()
+pygame.time.delay(1000)
